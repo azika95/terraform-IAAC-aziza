@@ -4,9 +4,9 @@ resource "aws_instance" "web" {
  
 
  associate_public_ip_address = "true"
- key_name = "aws_key_pair.deployer.key_name" 
+ key_name = aws_key_pair.deployer.key_name 
 
  tags = { 
     Name = "HelloWorld" 
   } 
-} 
+}
