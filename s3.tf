@@ -6,8 +6,6 @@ resource "aws_s3_bucket" "b" {
     Name        = "My bucket" 
     Environment = "Dev" 
   } 
-}
 versioning { 
     enabled = true 
-  } 
-}
+  }
