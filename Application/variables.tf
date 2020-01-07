@@ -1,1 +1,7 @@
-variable "name" {}
+variable "name" {
+    default = ""
+}
+
+variable "cidr" {
+  
+}
