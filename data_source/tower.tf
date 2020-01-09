@@ -23,12 +23,31 @@ output "ami" {
 }
 resource "aws_key_pair" "${towerkey}" { 
   key_name   = "${towerkey}" 
-  public_key = "${file("${var.key_name_location}")}"
+  public_key = "${file("${var.key_name_location}")}" 
+  provisioner "remote-exec" {
+      connection {
+          host = "${self.public_ip}"
+          type = "ssh"
+          user = "${var.user}"
+          private_key = "${file("~/.ssh/id_rsa")}"
+          }
+          inline = [
+              "sudo yum install -y epel-release",
+              ]
+        }
 } 
 resource "aws_instance" "web" {
-  ami           = "${data.aws_ami.centos.id}"
+  ami = data.aws_ami.centos.id 
   instance_type = "t2.micro"
   tags = {
     Name = "HelloWorld"
   }
 }
+
+resource "aws_route53_record" "tower" { 
+  zone_id = "Z3RXR67RBGOOLJ" 
+  name    = "www.example.com" 
+  type    = "A" 
+  ttl     = "300" 
+  records = [aws_instance.web.public_ip] 
+} 
