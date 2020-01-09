@@ -22,5 +22,5 @@ output "ami" {
 
   tags = {
     Name = "HelloWorld"
-  }
-}
+    }
+    }
