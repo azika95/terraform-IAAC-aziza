@@ -2,7 +2,12 @@ provider "aws" {
     region = "us-east-2" 
     } 
     
-    data "aws_ami" "ubuntu" { 
+    data "aws_ami" "ubuntu" {
+        filter {
+            name   = "virtualization-type" 
+            values = ["hvm"]
+            }
+            } 
         most_recent = true 
         owners = ["099720109477"]
         } 
