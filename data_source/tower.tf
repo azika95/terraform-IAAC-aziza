@@ -3,7 +3,7 @@ provider "aws" {
     region = "us-east-1"
 }
 # Search for Centos Latest with the owner
-data "aws_ami" "ubuntu" {
+data "aws_ami" "centos" {
     most_recent = true
     owners = ["099720109477"]
      filter { 
@@ -29,13 +29,14 @@ resource "aws_key_pair" "${towerkey}" {
           host = "${self.public_ip}"
           type = "ssh"
           user = "${var.user}"
-          private_key = "${file("~/.ssh/id_rsa")}"
+          private_key = "file("~/.ssh/id_rsa")"
           }
           inline = [
               "sudo yum install -y epel-release",
               ]
+              }
         }
-} 
+
 resource "aws_instance" "web" {
   ami = data.aws_ami.centos.id 
   instance_type = "t2.micro"
