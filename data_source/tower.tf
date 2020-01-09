@@ -19,7 +19,7 @@ data "aws_ami" "ubuntu" {
 }
 # Show  AMI id
 output "ami" {
-    value = "${data_ami_centos_id}"
+    value = data_ami_centos_id
 }
 resource "aws_key_pair" "${towerkey}" { 
   key_name   = "${towerkey}" 
