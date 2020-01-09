@@ -3,14 +3,14 @@ provider "aws" {
     } 
     
     
-    data "aws_ami" "ubuntu" {
-        filter {
-            name = "root_device-type"
-            values = ["ebs"]
-            most_recent = true
-            owners = ["099720109477"]
-            }
-
+ data “aws_ami” “ubuntu” {
+    filter {
+    name = “root-device-type”
+    values = [“ebs”]
+}
+most_recent = true
+owners = [“099720109477”]
+}
 
 output "ami" {
     value = "${data.aws_ami.ubuntu.id}" 
@@ -23,4 +23,4 @@ resource "aws_instance" "web" {
   tags = {
     Name = "HelloWorld"
     }
-}
+    }
