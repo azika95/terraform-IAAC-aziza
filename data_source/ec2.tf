@@ -4,8 +4,8 @@ provider "aws" {
     
     data "aws_ami" "ubuntu" {
         filter {
-            name   = "virtualization-type" 
-            values = ["hvm"]
+            name   = "root_divice-type" 
+            values = ["ebs"]
             }
             } 
         most_recent = true 
