@@ -11,8 +11,8 @@ data "aws_ami" "centos" {
          values = ["ebs"] 
     most_recent =true
     owners = [679593333241]
-         } 
-     filter { 
+    }
+         filter { 
          name ="name" 
          values = ["CentOS Linux 7 x86_64 HVM EBS *"] 
          } 
@@ -21,15 +21,15 @@ data "aws_ami" "centos" {
 output "ami" {
     value = data_ami_centos_id
 }
-resource "aws_key_pair" "${towerkey}" { 
-  key_name   = "${towerkey}" 
-  public_key = "${file("${var.key_name_location}")}" 
+resource "aws_key_pair" "towerkey" { 
+  key_name   = towerkey 
+  public_key = {file("~/.ssh/id_rsa}")} 
   provisioner "remote-exec" {
       connection {
-          host = "${self.public_ip}"
+          host = self.public_ip}"
           type = "ssh"
-          user = "${var.user}"
-          private_key = "file("~/.ssh/id_rsa")"
+          user = "centos"
+          private_key = file("~/.ssh/id_rsa")
           }
           inline = [
               "sudo yum install -y epel-release",
@@ -48,7 +48,7 @@ resource "aws_instance" "tower" {
 
 resource "aws_route53_record" "tower" { 
   zone_id = "Z3RXR67RBGOOLJ" 
-  name    = "www.example.com" 
+  name    = "www.aziza.com" 
   type    = "A" 
   ttl     = "300" 
   records = [aws_instance.web.public_ip] 

@@ -3,7 +3,7 @@ provider "aws" {
     region = "us-east-1"
 }
 # Search for Centos Latest with the owner
-data "aws_ami" "ubuntu" {
+data "aws_ami" "centos" {
     most_recent = true
     owners = ["099720109477"]
      filter { 
