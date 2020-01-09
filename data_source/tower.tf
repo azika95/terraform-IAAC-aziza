@@ -1,28 +1,31 @@
-# Search for Centos Latest with the owner
+# Search for CentOS latest with the owner
 data "aws_ami" "centos" {
+    filter {
+        name = "root-device-type"
+        values = ["ebs"]
+        }
+    filter {
+        name = "name"
+        values = ["CentOS Linux 7 x86_64 HVM EBS *"]
+        } 
     most_recent = true
-    owners = ["099720109477"]
-     filter { 
-        name  = "root-device-type" 
-         values = ["ebs"] 
-    most_recent =true
-    owners = [679593333241]
-    }
-         filter { 
-         name ="name" 
-         values = ["CentOS Linux 7 x86_64 HVM EBS *"] 
-         } 
+    owners = ["679593333241"]
 }
-# Show  AMI id
-output "ami" {
-    value = data_ami_centos_id
+# Show the AMI id
+output "centos" {
+    value = data.aws_ami.centos.id
 }
 resource "aws_key_pair" "towerkey" { 
-  key_name   = towerkey 
-  public_key = {file("~/.ssh/id_rsa}")} 
+  key_name   = "deployer" 
+  public_key = file("~/.ssh/id_rsa.pub") 
+} 
+resource "aws_instance" "tower" {
+  ami           = data.aws_ami.centos.id
+  instance_type = "t2.micro"
+  key_name = aws_key_pair.towerkey.key_name
   provisioner "remote-exec" {
       connection {
-          host = self.public_ip}"
+          host = self.public_ip
           type = "ssh"
           user = "centos"
           private_key = file("~/.ssh/id_rsa")
@@ -31,21 +34,14 @@ resource "aws_key_pair" "towerkey" {
               "sudo yum install -y epel-release",
               ]
               }
-        }
-
-resource "aws_instance" "tower" {
-  ami = data.aws_ami.centos.id 
-  instance_type = "t2.micro"
-  key_name = aws_key_pair.tower.key_name
   tags = {
     Name = "HelloWorld"
   }
 }
-
 resource "aws_route53_record" "tower" { 
   zone_id = "Z3RXR67RBGOOLJ" 
-  name    = "www.aziza.com" 
+  name    = "tower.example.com" 
   type    = "A" 
   ttl     = "300" 
-  records = [aws_instance.web.public_ip] 
-} 
+  records = [aws_instance.tower.public_ip] 
+}
