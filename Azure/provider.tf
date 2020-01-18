@@ -167,7 +167,7 @@ resource "azurerm_virtual_machine" "vm1" {
 } 
 
   tags { 
-
+      
     environment = "staging" 
 
   } 
